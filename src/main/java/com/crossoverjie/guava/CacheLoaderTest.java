@@ -27,13 +27,16 @@ public class CacheLoaderTest {
 
     private void init() throws InterruptedException {
         loadingCache = CacheBuilder.newBuilder()
+
                 .expireAfterWrite(2, TimeUnit.SECONDS)
+
                 .removalListener(new RemovalListener<Object, Object>() {
                     @Override
                     public void onRemoval(RemovalNotification<Object, Object> notification) {
                         LOGGER.info("删除原因={}，删除 key={},删除 value={}",notification.getCause(),notification.getKey(),notification.getValue());
                     }
                 })
+
                 .build(new CacheLoader<Integer, AtomicLong>() {
                     @Override
                     public AtomicLong load(Integer key) throws Exception {
